@@ -1,78 +1,4 @@
-<!-- <template>
-    <div class="canvas-container">
-      <canvas ref="canvasRef" class="webgl"></canvas>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted } from "vue";
-  import * as THREE from "three";
-  
-  const canvasRef = ref(null);
-  
-  onMounted(() => {
-    // 🔵 ایجاد صحنه و دوربین
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      100
-    );
-    camera.position.z = 3;
-  
-    // 🟢 تنظیم WebGLRenderer
-    const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.value,
-      alpha: true, // 🔥 پس‌زمینه شفاف
-    });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  
-    // 🟠 ایجاد کره مشبک
-    const geometry = new THREE.SphereGeometry(1, 32, 32);
-    const material = new THREE.MeshBasicMaterial({
-      color: 0xff5500, // نارنجی
-      wireframe: true, // ✅ مشبک
-    });
-    const sphere = new THREE.Mesh(geometry, material);
-    scene.add(sphere);
-  
-    // 🔄 انیمیشن چرخش کره
-    const animate = () => {
-      requestAnimationFrame(animate);
-      sphere.rotation.y += 0.005;
-      sphere.rotation.x += 0.003;
-      renderer.render(scene, camera);
-    };
-    animate();
-  
-    // 🔀 تغییر اندازه صفحه
-    window.addEventListener("resize", () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  });
-  </script>
-  
-  <style scoped>
-  .canvas-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  .webgl {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  </style>
-   -->
+
  <template>
   <canvas ref="canvasRef" class="webgl"></canvas>
 </template>
@@ -103,7 +29,7 @@ onMounted(() => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   // 🟠 3️⃣ ایجاد کره و متریال مشبک
-  const geometry = new THREE.SphereGeometry(1, 12, 12);
+  const geometry = new THREE.SphereGeometry(1, 10, 10);
   const material = new THREE.MeshBasicMaterial({
     color: 0xff5500, // نارنجی
     wireframe: true, // ✅ مشبک

@@ -1,6 +1,8 @@
 <template>
     <div class="intro-container">
-      <Background3D /> <!-- بک‌گراند سه‌بعدی -->
+      <!-- بک‌گراند سه‌بعدی -->
+      <!-- <Background3D /> -->
+       <FirstStep3D />
       <h1 ref="title" class="intro-title">Welcome to Amaterasu</h1>
       <button ref="enterButton" class="enter-button" @click="enterSite">
         Click to Enter
@@ -11,7 +13,8 @@
   <script setup>
   import { ref, onMounted } from "vue";
   import gsap from "gsap";
-  import Background3D from "./Background3D.vue"; // ایمپورت بک‌گراند سه‌بعدی
+  // import Background3D from "./Background3D.vue";
+  import FirstStep3D from "./FirstStep3D.vue";
   
   const title = ref(null);
   const enterButton = ref(null);
