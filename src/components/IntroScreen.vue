@@ -1,9 +1,8 @@
 <template>
   <div class="intro-container">
-    <!-- بک‌گراند سه‌بعدی -->
-    <!-- <Background3D /> -->
     <!-- بک‌گراند موجی -->
     <WaveBackground />
+    <!-- بک‌گراند سه‌بعدی -->
     <FirstStep3D />
     <button ref="enterButton" class="enter-button" @click="enterSite">
       Click to Enter
@@ -22,9 +21,12 @@ const enterButton = ref(null);
 const enterSite = () => {
   gsap.to(".intro-container", {
     opacity: 0,
+    scale: 0.9,
     duration: 1,
+    ease: "power2.inOut",
     onComplete: () => {
       console.log("Enter button clicked! Transition to main page...");
+      // انتقال به صفحه اصلی یا اجرای انیمیشن‌های بیشتر
     },
   });
 };

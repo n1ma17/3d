@@ -5,17 +5,32 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import * as THREE from "three";
 
 const canvasRef = ref(null);
-
+const windowSize = computed(() => {
+  return window.innerWidth / window.innerHeight
+})
+const c1 = computed(() => {
+  return {
+    x: window.innerWidth < 1024 ? 0.41 : 0.81,
+    y: window.innerWidth < 1024 ? 0.40 : 0.80,
+    spacing: window.innerWidth < 1024 ? 0.8 : 1.6
+  }
+})
+const c2 = computed(() => {
+  return {
+    x: window.innerWidth < 1024 ? 0.51 : 0.91,
+    y: window.innerWidth < 1024 ? 0.50 : 0.90
+  }
+})
 onMounted(() => {
   // 🔵 1️⃣ ایجاد صحنه و دوربین
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
     75,
-    window.innerWidth / window.innerHeight,
+    windowSize.value,
     0.1,
     100
   );
@@ -32,7 +47,7 @@ onMounted(() => {
   // 🟠 3️⃣ ایجاد دایره‌های 3D با Three.js
   const numCircles = 4; // تعداد دایره‌ها
   // const radius = 1;
-  const circleGeometry = new THREE.RingGeometry(0.8, 0.81, 100); // دایره‌های بزرگتر
+  const circleGeometry = new THREE.RingGeometry(c1.value.x, c1.value.y, 50); // دایره‌های بزرگتر
   const circleMaterial = new THREE.MeshBasicMaterial({
     color: 0xfefefe,
     side: THREE.DoubleSide,
@@ -41,7 +56,7 @@ onMounted(() => {
   });
 
   const gridSize = Math.ceil(Math.sqrt(numCircles)); // اندازه شبکه مربعی
-  const spacing = 1.6; // فاصله بین دایره‌ها
+  const spacing = c1.value.spacing; // فاصله بین دایره‌ها
   const offset = (gridSize - 1) * spacing * 0.5; // محاسبه آفست برای وسط‌چین کردن
 
   for (let i = 0; i < numCircles; i++) {
@@ -55,7 +70,7 @@ onMounted(() => {
   const diamondGroup = new THREE.Group(); // گروه دایره‌های لوزی
   scene.add(diamondGroup);
 
-  const diamondSpacing = 2; // فاصله بین دایره‌های لوزی
+  const diamondSpacing = c1.value.spacing + 0.2; // فاصله بین دایره‌های لوزی
   const diamondOffset = (gridSize - 1) * diamondSpacing * 0.5;
 
   for (let i = 0; i < numCircles; i++) {
@@ -69,7 +84,7 @@ onMounted(() => {
   diamondGroup.rotation.z = Math.PI / 4;
 
   // 🟠 4️⃣ ایجاد دایره مرکزی
-  const centerGeometry = new THREE.RingGeometry(0.9, 0.91, 100);
+  const centerGeometry = new THREE.RingGeometry(c2.value.x, c2.value.y, 100);
   const centerMaterial = new THREE.MeshBasicMaterial({
     color: 0xffffff,
     side: THREE.DoubleSide,
@@ -78,7 +93,7 @@ onMounted(() => {
   scene.add(centerSphere);
 
   // 🔄 5️⃣ انیمیشن چرخش دایره وسط (مثل لودینگ)
-  let rotateSpeed = 0.05;
+  let rotateSpeed = 0.5;
   let stopRotation = false;
 
   const animate = () => {
