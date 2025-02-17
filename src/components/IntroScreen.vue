@@ -71,4 +71,9 @@ onMounted(() => {
   /* z-index: 10; */
   opacity: 1 !important;
 }
+@media screen and (max-width: 1024px) {
+  .enter-button {
+    font-size: 14px;
+  }
+}
 </style>
