@@ -70,8 +70,8 @@ onMounted(() => {
     circle.position.set(x, y, 0);
     diamondGroup.add(circle);
   }
-  // چرخش گروه دایره‌های لوزی
-  diamondGroup.rotation.z = Math.PI / 4;
+    // چرخش گروه دایره‌های لوزی
+    diamondGroup.rotation.z = Math.PI / 4;
 
   // 🟠 4️⃣ ایجاد دایره مرکزی
   const centerGeometry = new THREE.RingGeometry(c2.value.x, c2.value.y, 100);
@@ -83,6 +83,18 @@ onMounted(() => {
   const centerSphere = new THREE.Mesh(centerGeometry, centerMaterial);
   scene.add(centerSphere);
 
+  // **افکت درخشش**
+  const glowGeometry = new THREE.RingGeometry(c1.value.x + 0.1, c1.value.y + 0.1, 100);
+  const glowMaterial = new THREE.MeshBasicMaterial({
+    color: 0xffffcc,
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0, 
+    blending: THREE.AdditiveBlending, 
+  });
+
+  const glowSphere = new THREE.Mesh(glowGeometry, glowMaterial);
+  scene.add(glowSphere);
   // hitbox نامرئی
   const hitboxGeometry = new THREE.PlaneGeometry(
     c2.value.x * 3,
@@ -112,11 +124,35 @@ onMounted(() => {
         duration: 0.9,
         ease: "power2.out",
       });
+      gsap.to(glowSphere.scale, {
+        x: 0.9,
+        y: 0.9,
+        duration: 0.9,
+        ease: "power2.out",
+      })
+      gsap.to(glowMaterial, {
+        opacity: 0.3, 
+        duration: 0.5,
+        ease: "power2.out",
+      });
+
     } else if (intersects.length === 0 && isHovered) {
       isHovered = false;
       gsap.to(centerSphere.scale, {
         x: 1,
         y: 1,
+        duration: 0.9,
+        ease: "power2.out",
+      });
+      gsap.to(glowSphere.scale, {
+        x: 1,
+        y: 1,
+        duration: 0.9,
+        ease: "power2.out",
+      })
+
+      gsap.to(glowMaterial, {
+        opacity: 0, 
         duration: 0.9,
         ease: "power2.out",
       });
