@@ -1,7 +1,7 @@
 <template>
   <div class="intro-container">
     <!-- بک‌گراند موجی -->
-    <WaveBackground />
+    <FogBackground />
     <!-- بک‌گراند سه‌بعدی -->
     <FirstStep3D />
     <button ref="enterButton" class="enter-button" @click="enterSite">
@@ -15,7 +15,7 @@ import { ref, onMounted } from "vue";
 import gsap from "gsap";
 // import Background3D from "./Background3D.vue";
 import FirstStep3D from "./FirstStep3D.vue";
-import WaveBackground from "./WaveBackground.vue";
+import FogBackground from "./FogBackground.vue";
 const enterButton = ref(null);
 
 const enterSite = () => {
@@ -43,6 +43,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  width: 100vw;
   text-align: center;
   position: relative;
   overflow: hidden;

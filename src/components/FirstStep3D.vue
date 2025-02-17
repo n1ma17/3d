@@ -7,43 +7,33 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import * as THREE from "three";
+import gsap from "gsap";
 
 const canvasRef = ref(null);
-const windowSize = computed(() => {
-  return window.innerWidth / window.innerHeight
-})
-const c1 = computed(() => {
-  return {
-    x: window.innerWidth < 1024 ? 0.41 : 0.81,
-    y: window.innerWidth < 1024 ? 0.40 : 0.80,
-    spacing: window.innerWidth < 1024 ? 0.8 : 1.6
-  }
-})
-const c2 = computed(() => {
-  return {
-    x: window.innerWidth < 1024 ? 0.51 : 0.91,
-    y: window.innerWidth < 1024 ? 0.50 : 0.90
-  }
-})
+const windowSize = computed(() => window.innerWidth / window.innerHeight);
+
+const c1 = computed(() => ({
+  x: window.innerWidth < 1024 ? 0.41 : 0.81,
+  y: window.innerWidth < 1024 ? 0.4 : 0.8,
+  spacing: window.innerWidth < 1024 ? 0.8 : 1.6,
+}));
+
+const c2 = computed(() => ({
+  x: window.innerWidth < 1024 ? 0.51 : 0.91,
+  y: window.innerWidth < 1024 ? 0.5 : 0.9,
+}));
+
 onMounted(() => {
-  // 🔵 1️⃣ ایجاد صحنه و دوربین
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    windowSize.value,
-    0.1,
-    100
-  );
+  const camera = new THREE.PerspectiveCamera(75, windowSize.value, 0.1, 100);
   camera.position.z = 3;
 
-  // 🟢 2️⃣ تنظیم WebGLRenderer
   const renderer = new THREE.WebGLRenderer({
     canvas: canvasRef.value,
     alpha: true, // 🔥 پس‌زمینه شفاف
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
   // 🟠 3️⃣ ایجاد دایره‌های 3D با Three.js
   const numCircles = 4; // تعداد دایره‌ها
   // const radius = 1;
@@ -89,39 +79,67 @@ onMounted(() => {
     color: 0xffffff,
     side: THREE.DoubleSide,
   });
+
   const centerSphere = new THREE.Mesh(centerGeometry, centerMaterial);
   scene.add(centerSphere);
 
-  // 🔄 5️⃣ انیمیشن چرخش دایره وسط (مثل لودینگ)
-  let rotateSpeed = 0.5;
-  let stopRotation = false;
+  // hitbox نامرئی
+  const hitboxGeometry = new THREE.PlaneGeometry(
+    c2.value.x * 3,
+    c2.value.y * 3
+  );
+  const hitboxMaterial = new THREE.MeshBasicMaterial({ visible: false });
+  const hitbox = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+  hitbox.position.set(0, 0, 0.01);
+  scene.add(hitbox);
 
-  const animate = () => {
-    requestAnimationFrame(animate);
+  let isHovered = false;
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
 
-    if (!stopRotation) {
-      centerSphere.rotation.z += rotateSpeed; // چرخش دایره وسط
+  const onMouseMove = (event) => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(hitbox);
+
+    if (intersects.length > 0 && !isHovered) {
+      isHovered = true;
+      gsap.to(centerSphere.scale, {
+        x: 0.9,
+        y: 0.9,
+        duration: 0.9,
+        ease: "power2.out",
+      });
+    } else if (intersects.length === 0 && isHovered) {
+      isHovered = false;
+      gsap.to(centerSphere.scale, {
+        x: 1,
+        y: 1,
+        duration: 0.9,
+        ease: "power2.out",
+      });
     }
-
-    if (centerSphere.rotation.z > Math.PI * 2) {
-      stopRotation = true; // پس از یک دور چرخش دایره ثابت می‌شود
-    }
-
-    renderer.render(scene, camera);
   };
-  animate();
 
-  // 🔀 تغییر اندازه صفحه
+  window.addEventListener("mousemove", onMouseMove);
+
   window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
+
+  const animate = () => {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  };
+  animate();
 });
 </script>
 
 <style scoped>
-/* 🔵 استایل‌های کلی */
 .canvas-container {
   position: relative;
   width: 100%;
