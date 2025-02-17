@@ -12,14 +12,15 @@ onMounted(async () => {
     mouseControls: true,
     touchControls: true,
     gyroControls: false,
-    minHeight: window.innerHeight,
-    minWidth: window.innerWidth, // ✅ عرض رو 100% بگیر
-    highlightColor: 0xc6d6ff,
-    midtoneColor: 0x56,
-    lowlightColor: 0xd0edff,
-    baseColor: 0x204c,
-    blurFactor: 0.76,
-    zoom: 0.3,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    highlightColor: 0x4e9db8,
+    midtoneColor: 0x3ca0c0,
+    lowlightColor: 0xeff4fc,
+    baseColor: 0x0b1e42,
+    blurFactor: 0.9,
+    speed: 1.5,
+    zoom: 0.4,
     THREE: THREE,
   });
 
@@ -45,7 +46,7 @@ onBeforeUnmount(() => {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;  /* عرض کل صفحه */
+  width: 100vw; /* عرض کل صفحه */
   height: 100vh; /* ارتفاع کل صفحه */
   z-index: -10;
 }
