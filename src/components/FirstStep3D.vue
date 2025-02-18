@@ -1,8 +1,6 @@
 <template>
   <div class="canvas-container">
     <canvas ref="canvasRef" class="webgl"></canvas>
-    <div ref="cursorCircle" class="cursor-circle"></div>
-    <div ref="cursorCircle2" class="cursor-circle2"></div>
   </div>
 </template>
 
@@ -12,8 +10,7 @@ import * as THREE from "three";
 import gsap from "gsap";
 
 const canvasRef = ref(null);
-const cursorCircle = ref(null);
-const cursorCircle2 = ref(null)
+
 const windowSize = computed(() => window.innerWidth / window.innerHeight);
 
 const c1 = computed(() => ({
@@ -144,56 +141,14 @@ onMounted(() => {
   animate();
 });
 
-// 🎯 دایره‌ای که موس را دنبال می‌کند
-onMounted(() => {
-  let mouseX = 0;
-  let mouseY = 0;
-  let laggedX = 0;
-  let laggedY = 0;
 
-  const onMouseMove = (event) => {
-    mouseX = event.clientX;
-    mouseY = event.clientY;
-  };
-
-  window.addEventListener("mousemove", onMouseMove);
-
-  const animateCursor = () => {
-    requestAnimationFrame(animateCursor);
-
-    laggedX += (mouseX - laggedX) * 0.1;
-    laggedY += (mouseY - laggedY) * 0.1;
-
-    gsap.to(cursorCircle.value, {
-      x: laggedX + 4,
-      y: laggedY + 4,
-      duration: 0.5,
-      ease: "power2.out",
-    });
-  };
-  const animateCursor2 = () => {
-    requestAnimationFrame(animateCursor2);
-
-    laggedX += (mouseX - laggedX) * 0.1;
-    laggedY += (mouseY - laggedY) * 0.1;
-
-    gsap.to(cursorCircle2.value, {
-      x: laggedX + 5,
-      y: laggedY + 5,
-      duration: 0.15,
-      ease: "power2.out",
-    });
-  };
-  animateCursor2()
-  animateCursor();
-});
 </script>
 
 <style scoped>
 .canvas-container {
   position: relative;
   width: 100%;
-  height: 100vh !important;
+  height: 100% !important;
 }
 
 .webgl {
@@ -204,27 +159,5 @@ onMounted(() => {
   height: 100vh;
 }
 
-/* 🎯 دایره‌ای که موس را دنبال می‌کند */
-.cursor-circle {
-  position: fixed;
-  width: 30px;
-  height: 30px;
-  border: 1px solid #eeeeee6c;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 105px #dfdfdf;
-  transition: background-color 0.3s ease;
-}
-.cursor-circle2 {
-  position: fixed;
-  width: 3px;
-  height: 3px;
-  background-color: #dfdfdf;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 105px #dfdfdf;
-  transition: background-color 0.3s ease;
-}
+
 </style>

@@ -49,5 +49,6 @@ onBeforeUnmount(() => {
   width: 100vw; /* عرض کل صفحه */
   height: 100vh; /* ارتفاع کل صفحه */
   z-index: -10;
+  overflow: hidden;
 }
 </style>
